@@ -54,4 +54,4 @@ For a preview of the template's output, see the [`main.pdf`](./main.pdf) file.
 This project is licensed under the MIT License. For more information, see the [`LICENSE`](./LICENSE) file. 
 
 ## Contact  
-For questions or feedback, feel free to connect with me on [LinkedIn](https://www.linkedin.com/in/ammar-taha/).  
+For questions or feedback, feel free to connect with me on <a href="https://www.linkedin.com/in/ammar-taha/" target="_blank">LinkedIn</a>.  
