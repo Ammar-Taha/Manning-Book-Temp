@@ -1,0 +1,462 @@
+\ProvidesPackage{ManningBook}
+
+\usepackage[margin=3cm]{geometry}
+\usepackage{graphicx, wrapfig2}
+\usepackage{tabularray}
+\usepackage{setspace}  
+\usepackage{emptypage} % Suppress Page Numbering and Headings on Empty Pages
+\usepackage[dvipsnames, table]{xcolor}
+\usepackage[pagestyles, calcwidth]{titlesec} % [pagestyles] activates "titleps" for Styling, and [calcwidth] to measure part title width for formatting.
+\usepackage{titletoc}
+\usepackage{fontspec} % Requires XeLaTeX/LuaLaTeX Engines
+\usepackage{mdframed}
+\usepackage{enumitem}
+\usepackage{amsmath, amssymb}
+\usepackage{tikz}
+\usetikzlibrary{tikzmark} 
+\usepackage{listings}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption} 
+\usepackage[rightcaption]{sidecap} 
+\usepackage{array}    
+\usepackage{colortbl} 
+\usepackage{pdfpages} 
+\usepackage{afterpage}
+\usepackage{ragged2e}
+\usepackage{svg} % For Inserting SVG External Files, You need to have Inkscape installed and running in the command line (check with "inkscape --version"), add it to the system's PATH environment variables (You open "Path" in the "System variables" down window, and add the directory in which inkscape is installed on your machine <C:\Program Files\Inkscape> also add <C:\Program Files\Inkscape\bin>), and lastly, add <--shell-escape> to your compiler run code.
+\usepackage{etoolbox} 
+\usepackage{stix, stix2} % For Acid-free (Circ&Inf) Symbole in Title Page, and ć
+\usepackage{textcase} % For the macro \MakeTextUppercase
+\usepackage{imakeidx}
+
+%%%%%%%%%%%%%%%%%						 %%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%% Defining Font Families %%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%						 %%%%%%%%%%%%%%%%%%%%%
+
+% Setting the Main Font Family of the Document 
+\setmainfont{itc-new-baskerville-roman-latin-1}[
+	Extension = .ttf,
+	Path = fonts/,
+	SizeFeatures={Size=12}
+]
+% 1. Font for the Chapter Title Head as Whole
+\newfontfamily\ChapHeadFont{itc-new-baskerville-italic-latin-1}[
+	Extension = .ttf,
+	Path = fonts/
+]
+% 2. Font for ChapterTopics Env. Fixed Head
+\newfontfamily\ChapTopicHeadFont{ITCFranklinGothicStd-DemiIt}[
+	Extension = .otf,
+	Path = fonts/
+]
+%3. Font for ChapterTopics Env. Items
+\newfontfamily\ChapTopicItemFont{ITCFranklinGothicStd-Book}[
+	Extension = .otf,
+	Path = fonts/
+]
+% 4. Font for the Page Numbering
+\newfontfamily\PageNoFont{itc-new-baskerville-bold-latin-1}[
+	Extension = .ttf,
+	Path = fonts/
+]
+% 5. Font for the Headers
+\newfontfamily\HeaderFont{itc-new-baskerville-bold-italic-latin-1}[
+	Extension = .ttf,
+	Path = fonts/
+]
+% 6. Font for the "CHAPTER" word on even page header
+\newfontfamily\ChapterMarkFont{franklingothic-demi}[
+	Extension = .otf,
+	Path = fonts/
+]
+% 7. Font for the Title of the custom "ManHighlight" Env.
+\newfontfamily\HighlightTitleFont{franklingothic-demicd}[
+	Extension = .otf,
+	Path = fonts/
+]
+
+% 8. Font for the body text of the custom "ManHighlight" Env.
+\newfontfamily\HighlightBodyFont{franklingothic-book}[
+	Extension = .otf,
+	Path = fonts/
+]
+% 9. Font for the Code Blocks
+\newfontfamily\CodeFont{CourierStd}[
+	Extension = .otf,
+	Path = fonts/
+]
+% 10. Font for the Author Name in P.4, Similar to Main Font
+\newfontfamily\AuthorNameFont{itc-new-baskerville-roman-latin-1}[
+	Extension = .ttf,
+	Path = fonts/
+]
+% 11. Font of the Big Letter of the Paragraph on the Part Page
+\newfontfamily\BigPartLetterFont{bsc}[
+	Extension = .ttf,
+	Path = fonts/	
+]	
+%% 12. Font of the Part TOC Entry
+\newfontfamily\PartTOCFont{itc-new-baskerville-black-latin-1}[
+	Extension = .ttf,
+	Path = fonts/	
+]
+
+%%%%%%%%%%%%%%%%%						 %%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%% Defining Custom Colors %%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%						 %%%%%%%%%%%%%%%%%%%%%
+\definecolor{TOCHeadColor}{cmyk}{0,0,0,0.45} % Color for the TOC Gray elements
+\definecolor{ChapTitleColor}{cmyk}{0.77,0.52,0.33,0.09} % Chapter Title Text
+\definecolor{ChapNoColor}{cmyk}{0.17,0.12,0.12,0}	% Chapter Label(No.)
+\definecolor{ChapTopBack}{cmyk}{0.02,0.03,0.08,0} % ChapterTopics Env. Background
+\definecolor{SecLevelsColor}{RGB}{71, 107, 133} % Color of Sectional Levels Head
+\definecolor{SummaryItemColor}{cmyk}{0.18,0.27,0.56,0} % Color of Summary Item Label
+\definecolor{HighlightBodyColor}{cmyk}{0.57,0.48,0.48,0.15} % Highlight Env. Color
+\definecolor{CodeTitleBGColor}{cmyk}{0.46,0.18,0,0.19} % Color for Listing Title
+\definecolor{FigureCaptionColor}{cmyk}{0,0,0,0.60} % Color for Figures' Captions
+\definecolor{TableHeadRowColor}{cmyk}{0.49,0.14,0,0} % Color for 1st Table Row
+
+%%%%%%%%%%%%% Begin Brief TOC Setup %%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 1. The Part Entry
+\titlecontents{part}[0em]{
+		\vspace*{7pt}
+		\PartTOCFont\fontsize{14}{16}\selectfont\color{TOCHeadColor} PART
+	}
+	{\thepart\thecontentslabel}{}
+	{\titlerule*[1pc]{.}\contentspage}[\vspace*{7pt}]
+%% 2. The Chapter Entry
+\titlecontents{chapter}[2cm]{
+		\AuthorNameFont\fontsize{12}{14}\selectfont
+	}
+	{%\ChapNoTOCFont\selectfont\color{red}	-> Chap No setup									\contentslabel{18pt}													  			  \ChapTitleTOCFont\selectfont\color{blue} -> Chap Title setup
+	 \contentslabel{18pt}	
+	 \raisebox{0.2ex}{\tikz \fill[SummaryItemColor] (-0.2,0) rectangle (0,0.2);} 			 \hspace{5pt}
+	}{}
+	{\hspace{5pt}\contentspage}[\vspace*{5pt}]
+%%%%%%%%%%%%% End Brief TOC Setup %%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Index Setup
+\makeindex[
+    title={
+    	\vspace*{2cm}
+        \raggedleft\ChapHeadFont\fontsize{30}{32}\selectfont
+        \color{ChapTitleColor} index \\[-25pt]
+        \rule{\linewidth}{0.4pt}
+    }, 
+    columns=3, 
+    columnsep=20pt,
+    options={-s index_style.ist}
+] 
+
+%% The Part Head Format 
+\renewcommand\thepart{\arabic{part}}
+\mdfdefinestyle{PrtSy}{
+	backgroundcolor=ChapTopBack,
+	font=\ChapHeadFont\fontsize{38pt}{40pt}\selectfont,
+	innerrightmargin=20pt
+}
+\titleclass{\part}{top} % Forces the Part to accept content after it's title
+\titleformat{\part}[display]
+	{\vspace*{-3cm}\raggedleft\color{ChapTitleColor}}
+	{
+	\begin{minipage}{\the\titlewidth} % minipage taking extact Part title width
+	\begin{mdframed}[style=PrtSy]
+		\raggedleft\partname~\thepart
+	\end{mdframed}
+	\end{minipage}
+	}
+	{20pt}
+	{\ChapHeadFont\fontsize{40pt}{42pt}\selectfont}[\vspace{-5cm}]
+    
+%% The Chapter Head Format
+%% Centering the Chapter Title Text Vertically over the Chapter Label(No.):									1. Measure the heights of both and assign them into length variables.									2. Apply: S <sep value, a length par> = -(Z-Y)/2, where: Z<Label Height>, Y<Text>
+\titleformat{\chapter}[display]
+	{\raggedleft\color{ChapNoColor}}
+	{\ChapHeadFont\fontsize{225pt}{230pt}\selectfont\thechapter}
+	{-180pt}
+	{\ChapHeadFont\fontsize{30pt}{30pt}\selectfont\color{ChapTitleColor}}
+	[\LowerRule{0.7}]
+
+%% Formatting the Front Matter Numberless Chapters, Preface, Acknowledgments,...
+\titleformat{name=\chapter,numberless}[display]
+	{\vspace*{7cm}\raggedleft}{}{0pt}
+	{\ChapHeadFont\fontsize{30pt}{30pt}\selectfont\color{ChapTitleColor}}
+	[\LowerRule{1}]
+	
+%% Chapter Title Spacing
+\titlespacing*{\chapter}{0pt}{-50pt}{20pt} % {\chapter}{<left>}{<before>}{<after>}
+
+%% The Section Head Format
+\titleformat{\section}[hang]
+			{ % Format: Font, Size, Color
+				\color{SecLevelsColor}
+			 	\ChapTopicHeadFont \fontsize{14.5pt}{15.5pt} \selectfont
+			}{\llap{\thesection\hspace{20pt}}}{0pt}{}[\vspace{-8pt}]
+			% \llap: is a Primitive TeX Macro that puts it's argument in margin area
+			% [\vspace{} in after_code, can be replaced with \titlespacing for Sec]
+			
+%% The SubSection Head Format
+\titleformat{\subsection}[hang]
+			{ % Format: Font, Size, Color
+				\color{SecLevelsColor}
+			 	\ChapTopicHeadFont \fontsize{13pt}{14pt} \selectfont
+			}{\llap{\thesubsection\hspace{20pt}}}{0pt}{}[\vspace{-8pt}]
+			
+%% The SubSubSection Head Format
+\setcounter{secnumdepth}{3} % Fix to show \thesubsubsection 
+\titleformat{\subsubsection}[hang]
+			{ % Format: Font, Size, Color
+				\color{SecLevelsColor}
+			 	\ChapTopicHeadFont \fontsize{11pt}{12pt} \selectfont
+			}{\llap{\thesubsubsection\hspace{20pt}}}{0pt}{}[\vspace{-8pt}]
+
+%% Page Styles using <titleps>
+\newpagestyle{FMPageStyle}{ % Style for the Front Matter Pages like Preface
+	\setfoot[][
+		\textcolor{FigureCaptionColor}{
+			\PageNoFont\fontsize{12pt}{14pt}\selectfont\thepage}
+		]
+		[]{}{
+		\textcolor{FigureCaptionColor}{
+			\PageNoFont\fontsize{12pt}{14pt}\selectfont\thepage}		
+		}{}
+}
+% Style for the Front Matter Pages that come after the Title First Page
+\newpagestyle{FrontMatterMainPages}[\color{FigureCaptionColor}]{
+	\sethead[\thepage][
+		\HighlightBodyFont\fontsize{12pt}{14pt}\selectfont
+			\MakeTextUppercase{\chaptertitle}][]
+		{}{
+		\HighlightBodyFont\fontsize{12pt}{14pt}\selectfont
+			\MakeTextUppercase{\chaptertitle}
+		}{\thepage}
+}
+\newpagestyle{ChapterTitleStyle}{ % Style for the Chapter First Page
+	\setfoot[][\PageNoFont\selectfont\thepage][]{}{}{\PageNoFont\selectfont\thepage}
+}
+\newpagestyle{ChapterMainStyle}{ % Style for the Rest
+	\sethead[\textcolor{gray}{\PageNoFont\fontsize{12pt}{14pt}\selectfont
+				\llap{\thepage\hspace{45pt}}}]
+			[\ChapterMarkFont\selectfont {\Large{C}}HAPTER \thechapter~~ 								\HeaderFont\fontsize{12pt}{14pt}\selectfont\chaptertitle]
+			[]{}
+			{\HeaderFont\fontsize{12pt}{14pt}\selectfont\thesection~ \sectiontitle}					{\PageNoFont\fontsize{12pt}{14pt}\selectfont
+				\rlap{\hspace{10pt}\thepage}}
+}
+\newpagestyle{AppendixChapStyle}{ % Style for the Appendix Pages
+	\sethead[\textcolor{gray}{\PageNoFont\fontsize{12pt}{14pt}\selectfont
+				\llap{\thepage\hspace{45pt}}}]
+			[\ChapterMarkFont\selectfont {\Large{A}}PPENDIX \thechapter~~ 								\HeaderFont\fontsize{12pt}{14pt}\selectfont\chaptertitle]
+			[]{}
+			{\HeaderFont\fontsize{12pt}{14pt}\selectfont \sectiontitle}								{\PageNoFont\fontsize{12pt}{14pt}\selectfont
+				\rlap{\hspace{10pt}\thepage}}
+}
+\newpagestyle{IndexPagesStyle}{ % Style for the Index Pages
+	\sethead[\textcolor{gray}{\PageNoFont\fontsize{12pt}{14pt}\selectfont
+				\llap{\thepage\hspace{45pt}}}]
+			[\HighlightTitleFont\fontsize{12pt}{14pt}\selectfont INDEX]
+			[]{}
+			{\HighlightTitleFont\fontsize{12pt}{14pt}\selectfont INDEX}										{\PageNoFont\fontsize{12pt}{14pt}\selectfont
+				\rlap{\hspace{10pt}\thepage}}
+}
+%% Applying the Chapter Title Page Style at First
+\pagestyle{ChapterTitleStyle}
+
+%% Setup for the mdframed Env. inside ChapterTopics Custom Env.
+\mdfsetup{
+	fontcolor=ChapTitleColor, backgroundcolor=ChapTopBack,
+	innertopmargin=0.5cm,  innerbottommargin=0.5cm,
+    innerleftmargin=0.75cm, innerrightmargin=1cm,
+    topline=false, bottomline=false, rightline=false, leftline=false
+}
+
+%%%%%%%%%%%%% Begin Code Listings Setup %%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Hooks for Changing the Code Listing Environment Spacing
+\BeforeBeginEnvironment{lstlisting}{\vspace{0.35cm}\begin{spacing}{1.2}}
+\AfterEndEnvironment{lstlisting}{\vspace{0.35cm}\end{spacing}}
+
+%% Setup for the Style of the Code Listing Environment
+\lstset{
+    basicstyle=\CodeFont, % Default font
+    tabsize=1,            % Size of tabs
+    xleftmargin=15pt,
+    escapeinside={@}{@},  % To excute functional macros between @\job@
+    showstringspaces=false,
+    showspaces=false,
+    showtabs=false
+}
+%% New Caption Font and Format for the Listing Env
+\DeclareCaptionFont{HighCapFont}{
+	\HighlightTitleFont\fontsize{14pt}{18pt}\color{white}\selectfont
+}
+\DeclareCaptionFormat{listing}{
+	\tikz \node[inner sep=0pt, text width=\linewidth, fill=CodeTitleBGColor] 
+			at (0,0) {\hspace{10pt}#1#2#3};
+}
+\captionsetup[lstlisting]{
+	format=listing,
+	labelfont=HighCapFont, textfont=HighCapFont
+}
+%%%%%%%%%%%%%%% End Code Listings Setup %%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% The Path to the Images Directory <Eliminates the need of inserting before figs>
+\graphicspath{{Images/}}
+
+%% Caption Setup for Figure Floats
+\DeclareCaptionFont{FigCapFont}{
+	\HighlightTitleFont\fontsize{12pt}{14pt}\color{FigureCaptionColor}\selectfont
+}
+\captionsetup[figure]{
+    font=FigCapFont, 
+    singlelinecheck=false,     % Allow multi-line captions
+    justification=raggedright, 
+    skip=10pt, % The skip between caption and figure
+    indention=4pt
+}
+
+%% Caption Setup for the Subfigure Floats
+\DeclareCaptionFont{SubfigureFont}{
+	\ChapTopicHeadFont\fontsize{10pt}{11pt}\selectfont\color{black}
+}
+\captionsetup[subfigure]{
+	font=SubfigureFont,
+    justification=raggedright, 
+    skip=6pt
+}
+
+%% Increasing the Table Row Height
+\renewcommand{\arraystretch}{1.8}
+
+%% Caption Setup for the Table Float
+\DeclareCaptionFont{TabCapFont}{
+	\HighlightTitleFont\fontsize{13pt}{14pt}\color{black}\selectfont
+}
+\captionsetup[table]{
+    font=TabCapFont, 
+    singlelinecheck=false,     
+    justification=centering, 
+    skip=6pt 
+}
+
+%% Scalable Vector Graphics (SVG) Setup
+\svgsetup{inkscapeexe="C:/Program Files/Inkscape/bin/inkscape.exe"}
+\svgpath{{Images/}} % Path to the External SVG Files
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%% 								%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%% Custom Commands and Envs Area %%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%% 								%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Inserting a Blank Page with the help of afterpage Package
+\newcommand\blankpage{ % Use as: \afterpage{\blankpage}
+	\null
+    \thispagestyle{empty}
+    \addtocounter{page}{-1} % Skip Counting a Blank Page
+    \newpage
+}
+
+%% Inserting New Ready to use Consecutive Page
+\newcommand{\InsertNewPage}{
+	\let\cleardoublepage\clearpage
+	
+	\pagebreak 
+}
+
+%% A command to place a full-page sized tikz grid
+\newcommand{\PlacePageGrid}{ % Run Twice to Resolve !!
+	\begin{tikzpicture}[remember picture, overlay]
+    	\draw[step=1cm, gray, very thin] (current page.south west) grid 
+    			(current page.north east);
+	\end{tikzpicture}		
+}
+
+%% Formatting the First Letter of the Paragraph of the Part Page
+\newcommand{\BigPartLetter}[1]{
+	{\BigPartLetterFont\fontsize{35}{36}\selectfont\color{ChapTitleColor}#1}
+}	
+
+%% Define a Custom Command for the Lower Rule
+\newcommand{\LowerRule}[1]{\vspace{-15pt}\rule{#1\linewidth}{0.5pt}}
+
+%% Side Head Title Command
+\newcommand{\ManHeadLine}[3]{
+	{\HighlightTitleFont\fontsize{#1}{#2}\color{SecLevelsColor}\selectfont 
+		\par\noindent #3}	
+}
+
+%% Shape-Classified Code Annotation Commands
+\newcommand{\LeftArrowedNote}[6]{ % Use in tikzpictures only !
+	%% Arguments: #1<Node Label>, (#2,#3)<shift>, #4<tikzmark name> #5<Node Content "Text Annot">, 				#6<Arrow Size>
+	\node[anchor=west] (#1) at ([shift={(#2,#3)}]{pic cs:#4}) {#5};
+    \draw[-latex] (#1.west) -- ++(#6,0);
+}
+\newcommand{\RightWalledNote}[8]{
+	\node[anchor=west, align=left] (#1) at ([shift={(#2,#3)}]{pic cs:#4}) {#5};
+    \draw[-latex] (#1.west) -- ++(#6,0);
+    \draw (#1.west) -- ++(0,#7)
+    	  (#1.west) -- ++(0,-#8); % I leave the minus here !!
+}		
+\newcommand{\RightArrowedCornerNote}[9]{
+	\node[anchor=south] (#1) at % The Node of the tikzmark - No Content
+    		([shift={(#2,#3)}]{pic cs:#4}) {};
+    \draw[latex-] (#1.west) -- coordinate (corner) ++(#6,0);
+    \node[anchor=south west, align=left, shift={(#8,#9)}] at (corner) {#5};
+    \draw (#1.west) -- ++(#6,0) -- ++(0,#7);
+}
+
+%% The New Custom Environment for the Chapter Topics
+\newenvironment{ChapterTopics}[1]{
+	\vspace{2cm}
+	\hspace{-1.5cm}\begin{minipage}{#1\textwidth}
+	\begin{mdframed}
+	{\ChapTopicHeadFont\fontsize{12pt}{14pt}\selectfont This chapter covers}
+	\begin{itemize}[label={\raisebox{0.20ex}{\tiny$\blacksquare$}}, 
+					labelsep=18pt, itemsep=0pt]
+	\ChapTopicItemFont \fontsize{10pt}{12pt} \selectfont
+}{
+	\end{itemize}
+	\end{mdframed}
+	\end{minipage}
+}
+
+%% The Centered Note Environment 
+\newenvironment{ManNote}{
+	\begin{center}
+	\begin{minipage}{0.9\textwidth}
+	{\ChapterMarkFont\fontsize{11.5pt}{12pt}\selectfont
+		\color{SecLevelsColor} NOTE~ }
+}{
+	\end{minipage}
+	\end{center}
+}
+
+%% The Chapter Summary Environment
+\newenvironment{ChapterSummary}{
+	\paragraph{\ChapTopicHeadFont\fontsize{14pt}{15pt}\selectfont 
+				\color{SecLevelsColor} Summary}
+	\begin{itemize}[label={\raisebox{0.20ex}{
+							\color{SummaryItemColor} \tiny$\blacksquare$}}, 
+					labelsep=10pt, itemsep=0pt, leftmargin=1.25cm]
+}{
+	\end{itemize}
+}
+
+%% The Highlight Environment 
+\newenvironment{ManHighlight}[1]{ % Use: <\par\noindent> infront of Body Paragraph
+	\vspace{0.5cm}
+	\begin{mdframed}
+		{\HighlightTitleFont\fontsize{14}{15}\selectfont #1} 
+		\vspace{5pt}
+		\begin{spacing}{1.2}
+		\HighlightBodyFont\fontsize{12}{13}\color{HighlightBodyColor}\selectfont
+}{
+	\end{spacing}
+	\vspace{-0.5pt}
+	\end{mdframed}
+	\vspace{0.5cm}
+}

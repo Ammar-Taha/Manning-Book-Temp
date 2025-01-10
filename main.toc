@@ -1,0 +1,30 @@
+\contentsline {part}{1\hspace {1em}FUNDAMENTALS OF DEEP LEARNING}{1}{}%
+\contentsline {chapter}{\numberline {1}Vectors, matrices, and tensors in machine learning}{3}{}%
+\contentsline {section}{\numberline {1.1}First Section}{3}{}%
+\contentsline {subsection}{\numberline {1.1.1}First Subsection}{4}{}%
+\contentsline {paragraph}{\ChapTopicHeadFont \fontsize {14pt}{15pt}\selectfont \color {SecLevelsColor} Summary}{10}{}%
+\contentsline {chapter}{\numberline {2}What is deep learning?}{11}{}%
+\contentsline {section}{\numberline {2.1}Artificial intelligence, machine learning, and deep learning}{11}{}%
+\contentsline {subsection}{\numberline {2.1.1}Aniftcial intelligence}{11}{}%
+\contentsline {subsection}{\numberline {2.1.2}Machine learning}{11}{}%
+\contentsline {subsection}{\numberline {2.1.3}Learning representations from data}{11}{}%
+\contentsline {subsection}{\numberline {2.1.4}Understanding how deep learning works}{11}{}%
+\contentsline {subsection}{\numberline {2.1.5}What deep learning has achieved so far}{11}{}%
+\contentsline {subsection}{\numberline {2.1.6}Don 't believe the short-term hype}{11}{}%
+\contentsline {section}{\numberline {2.2}Before deep learning: a brief history of machine learning}{11}{}%
+\contentsline {subsection}{\numberline {2.2.1}Probabilistic modeling}{11}{}%
+\contentsline {subsection}{\numberline {2.2.2}Early neural networks}{11}{}%
+\contentsline {subsection}{\numberline {2.2.3}Kema methods}{11}{}%
+\contentsline {subsection}{\numberline {2.2.4}Decision trees, random forests, and gradient boosting machines}{11}{}%
+\contentsline {subsection}{\numberline {2.2.5}Back to neural networks}{11}{}%
+\contentsline {subsection}{\numberline {2.2.6}What makes deep learning different}{11}{}%
+\contentsline {chapter}{\numberline {3}Orthogonality and Independence in Linear Algebra}{12}{}%
+\contentsline {chapter}{\numberline {4}Algorithms of Reinforcement Learning for Robotics}{13}{}%
+\contentsline {part}{2\hspace {1em}DEEP LEARNINF IN PRACTICE}{14}{}%
+\contentsline {chapter}{\numberline {5}Fundamentals of machine learning}{16}{}%
+\contentsline {chapter}{\numberline {6}Generative deep learning}{17}{}%
+\contentsline {chapter}{\numberline {7}Advanced deep-learning best practices}{18}{}%
+\contentsline {chapter}{\numberline {8}Deep learning for computer vision}{19}{}%
+\contentsline {section}{\numberline {A.1}Installing the Python scientific suite}{21}{}%
+\contentsline {section}{\numberline {B.1}Setting up an AWS GPU instance}{24}{}%
+\contentsfinish 

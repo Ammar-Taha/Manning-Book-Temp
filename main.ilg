@@ -1,0 +1,10 @@
+This is makeindex, version 2.16 [MiKTeX 24.4].
+Scanning style file ./index_style.ist
+** Input style error (file = ./index_style.ist, line = 1):
+   -- Unknown specifier #.
+.....done (5 attributes redefined, 1 ignored).
+Scanning input file main.idx....done (93 entries accepted, 0 rejected).
+Sorting entries....done (636 comparisons).
+Generating output file main.ind....done (269 lines written, 0 warnings).
+Output written in main.ind.
+Transcript written in main.ilg.
